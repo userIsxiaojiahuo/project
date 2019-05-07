@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>会员登录-杭州女装网</title>
+    <link rel="shortcut  icon" href="../img/index/favicon.ico"/>
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/commonality.css">
+</head>
+<body>
+<header>
+    <div class="header-con">
+        <div class="logoImg">
+            <a href="index.html"><img src="../img/login/login_legal.png" alt=""></a>
+        </div>
+        <div class="return">
+            <a href="index.html">返回女装网首页></a>
+        </div>
+    </div>
+</header>
+<div class="banner">
+    <form action="">
+        <div class="userLogin">
+            <div class="loginMode">
+                <ul>
+                    <li><span>账号登陆</span><i></i></li>
+                    <li class="lastList"><span>手机登陆</span></li>
+                </ul>
+            </div>
+            <div class="loginBox">
+                <div class="prompt" id="prompt">
+                    <img src="../img/login/erry.jpg" alt=""><span>用户名或密码不正确</span>
+                    <a href="">忘记密码？</a>
+                </div>
+                <div class="item">
+                    <span class="login-user"></span>
+                    <input type="text" id="userName" name="username" class="itxt" placeholder="请输入用户名">
+                    <span class="clear-btn"></span>
+                </div>
+                <div class="item">
+                    <span class="login-user login-pas"></span>
+                    <input type="password" id="pwd" name="pwd" class="itxt txt-pas" placeholder="请输入密码">
+                    <span class="clear-btn"></span>
+                </div>
+                <div class="remember">
+                    <div class="check">
+                        <input type="checkbox" id="loginCheck" checked><span>记住账号</span>
+                    </div>
+                    <p><a href="">忘记密码？</a></p>
+                </div>
+                <input type="button" class="go-login" id="loginBtn" value="登陆">
+            </div>
+            <div class="loginBox firstWay2">
+                <div class="prompt">
+                    <img src="../img/login/erry.jpg" alt="">
+                    <span>手机号码不正确</span>
+                </div>
+                <div class="item">
+                    <span class="login-user item-fore1"></span>
+                    <input type="text" class="itxt" placeholder="请输入手机号码">
+                    <span class="clear-btn"></span>
+                </div>
+                <div class="item item-border">
+                    <span class="login-user login-pas login-code"></span>
+                    <input type="text" class="itxt txt-pas login-txt" placeholder="请输入验证码">
+                    <button class="code-btn">获取验证码</button>
+                </div>
+                <div class="remember">
+                    <div class="check">
+                        <input type="checkbox"> <span>记住手机</span>
+                    </div>
+                </div>
+                <button class="go-login">登陆</button>
+            </div>
+            <div class="free">
+                <div class="liejie">
+                    <p class="loginWX"></p>
+                    <!-- https://open.weixin.qq.com/connect/qrconnect?appid=wxb39d0d572711d7a2&redirect_uri=https://www.hznzcn.com/wxAuthBack&response_type=code&scope=snsapi_login&state=0#wechat_redirect-->
+                    <p class="loginTB"></p>
+                    <!-- https://oauth.taobao.com/authorize?client_id=23587424&response_type=code&redirect_uri=http://login2.hznzcn.com/callback.aspx?myclient=hznzcn&view=web&state=https%3a%2f%2fwww.hznzcn.com%2ftaobaoAuth-->
+                </div>
+                <div class="pleaReg">
+                    <a href="register.html">免费注册，有惊喜<img src="../img/login/free_right.png" title=""/> </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="footer">
+    <div class="treeList">
+        <ul>
+            <li><a href="">关于我们</a></li>
+            <li><a href="">联系我们</a></li>
+            <li><a href="">营业执照</a></li>
+            <li><a href="">隐私条款</a></li>
+            <li><a href="">资讯中心</a></li>
+            <li><a href="">大客户合作</a></li>
+            <li><a href="">服装批发市场</a></li>
+            <li><a href="">网店学堂</a></li>
+        </ul>
+    </div>
+    <p class="copyright">Copyright ©2010-2017 杭州常青网络科技有限公司 版权所有 ︱ 浙ICP备10036518号-1 ︱ 增值电信业务经营许可证：浙B2-20140379</p>
+</div>
+</body>
+</html>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+    window.onload = function () {
+        $("#loginBtn").click(function () {
+            let xhr = new XMLHttpRequest();
+            xhr.open("post", "../php/login.php");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.responseText == "1") {
+                        location.href = "index.html";
+                        if ($("#loginCheck").attr("checked") == "checked") {
+                            addCookie("login", $("#userName").val(), 7)
+                            $("#userName").val(getCookie("login"))
+                        }
+                    } else {
+                        $("#prompt").show()
+                        $("#pwd").val("")
+                        $("#pwd").focus()
+                    }
+                }
+            }
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("username=" + $("#userName").val() + "&pwd=" + $("#pwd").val());
+        })
+        $("#userName").focus(function () {
+            $(this).prev().addClass("op");
+        })
+        $("#userName").blur(function () {
+            $(this).prev().removeClass("op");
+        })
+        $("#pwd").focus(function () {
+            $(this).prev().addClass("up");
+        })
+        $("#pwd").blur(function () {
+            $(this).prev().removeClass("up");
+        })
+        // 账号保留
+        $("#userName").val(getCookie("login"))
+
+        // 页面加载获取焦点
+        $(document).ready(function () {
+            if ($("#userName").val() == "") {
+                $("#userName").focus()
+            } else {
+                $("#pwd").focus()
+            }
+        })
+    }
+
+    // 添加cookie
+    function addCookie(key, value, timer) {
+        let date = new Date()
+        date.setDate(date.getDate() + timer)
+        document.cookie = key + "=" + escape(value) + '; expires=' + date.toGMTString()
+    }
+
+    // 获取cookie，渲染到账号文本框
+    function getCookie(key) {
+        let arr = document.cookie.split("=")
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] == key) {
+                return arr[i + 1]
+            }
+        }
+    }
+</script>

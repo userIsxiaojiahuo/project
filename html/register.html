@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册-杭州女装网</title>
+    <link rel="shortcut  icon" href="../img/index/favicon.ico"/>
+    <link rel="stylesheet" href="../css/commonality.css">
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+<!--顶部-->
+<header>
+    <div class="header-con">
+        <div class="logoImg">
+            <a href="index.html"><img src="../img/login/login_legal.png" alt=""></a>
+        </div>
+        <div class="regText">
+            <span>用户注册</span>
+        </div>
+        <div class="return">
+            <a href="index.html">返回女装网首页></a>
+        </div>
+    </div>
+</header>
+
+<!--注册内容-->
+<div class="banner regBanner">
+    <div class="regCon">
+        <div class="userLogin regLogin">
+            <div class="loginMode">
+                <ul>
+                    <li><span>网店卖家注册</span></li>
+                </ul>
+            </div>
+            <form action="#">
+                <div class="information">
+                    <div class="import">
+                        <label class="phoneText">手 机 号</label>
+                        <input type="text" name="phone" id="phone" class="phoneIpt" placeholder="请输入您的手机号码">
+                        <span id="correct" class="right-and-wrong"></span>
+                    </div>
+                    <div id="UserPhone" class="field">
+                        <span><img src="../img/register/exclamation-mark.jpg" alt="">为了保护会员账户安全，新用户注册必须通过手机验证。</span>
+                    </div>
+                </div>
+                <div class="information">
+                    <div class="import">
+                        <label class="phoneText">设置密码</label>
+                        <input type="password" id="pWd" maxlength="16" name="passWord" class="phoneIpt"
+                               placeholder="最少使用两种字符组合">
+                        <span id="through" class="right-and-wrong"></span>
+                    </div>
+                    <div class="field" id="pasSpan">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="information">
+                    <div class="import">
+                        <label class="phoneText">确认密码</label>
+                        <input type="password" id="affirmPwd" name="affirmPwd" maxlength="16" class="phoneIpt"
+                               placeholder="请再次输入密码">
+                        <span id="againPassWord" class="right-and-wrong"></span>
+                    </div>
+                    <div class="field" id="affPwd">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="information">
+                    <div class="import">
+                        <label class="phoneText">验证码</label>
+                        <input type="text" value="获取验证码" class="countdown">
+                        <input type="button" id="btnCheck" class="b">
+                        <input type="text" name="regiCode" class="phoneIpt regCode" placeholder="请输入手机验证码">
+                    </div>
+                    <div class="field">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="zcdiv">
+                    <input type="checkbox" id="check" class="mandatory"><span>我已阅读并同意，</span>
+                    <a href="">《用户注册协议和隐私保护政策》</a>
+                </div>
+                <div class="regBtn">
+                    <input type="button" id="registerBtn" class="btn-sub" value="立即注册">
+                </div>
+                <div class="skip-login">
+                    <span class="spanText">已有账号？</span>
+                    <a href="login.html">请登陆</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--底部-->
+<div class="footer">
+    <div class="treeList">
+        <ul>
+            <li><a href="">关于我们</a></li>
+            <li><a href="">联系我们</a></li>
+            <li><a href="">营业执照</a></li>
+            <li><a href="">隐私条款</a></li>
+            <li><a href="">资讯中心</a></li>
+            <li><a href="">大客户合作</a></li>
+            <li><a href="">服装批发市场</a></li>
+            <li><a href="">网店学堂</a></li>
+        </ul>
+    </div>
+    <p class="copyright">Copyright ©2010-2017 杭州常青网络科技有限公司 版权所有 ︱ 浙ICP备10036518号-1 ︱ 增值电信业务经营许可证：浙B2-20140379</p>
+</div>
+</body>
+</html>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script>
+
+    window.onload = function () {
+        // 提交验证
+        $("#registerBtn").click(function () {
+            if ($(".right-and-wrong").css("display") == "block" && $("#check").attr("checked") == "checked" && $("#UserPhone").html() == "") {
+                let xhr = new XMLHttpRequest()
+                xhr.open("post", "../php/regin.php", true)
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        if (xhr.responseText == "1") {
+                            location.href = "login.html";
+                        }
+                    }
+                }
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("phone=" + $("#phone").val() + "&passWord=" + $("#pWd").val() + "&affirmPwd=" + $("#affirmPwd").val() + "&regiCode=" + $("#btnCheck").val())
+            }
+        })
+    }
+    // 验证手机号
+    $("#phone").blur(function () {
+        let tempValue = $("#phone").val();
+        let reg = /^(13|14|15|16|17|18|19)[0-9]{9}$/;
+        if (tempValue == "") {
+            $("#UserPhone").html("<span>" + "<img src='../img/login/erry.jpg'>" + "请输入您的手机号码" + "</span>").addClass('cur')
+            $("#correct").hide()
+        } else if (!reg.test(tempValue)) {
+            $("#UserPhone").html("<span>" + "<img src='../img/login/erry.jpg'>" + "请输入正确的手机号" + "</span>").addClass('cur')
+            $("#correct").hide()
+        } else {
+            let xhr = new XMLHttpRequest()
+            xhr.open("post", "../php/register.php")
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.responseText == "1") {
+                        $("#UserPhone").html("<span>" + "<img src='../img/login/erry.jpg'>" + "手机号已被使用！" + "</span>").addClass('cur')
+                    } else {
+                        $("#UserPhone").html("")
+                        $("#correct").show()
+                    }
+                }
+            }
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("phone=" + $("#phone").val())
+        }
+    })
+
+    //验证密码强度
+    $("#pWd").keyup(function () {
+        strength($(this).val(), true)
+    })
+
+    // 确认密码判断
+
+    $("#affirmPwd").blur(function () {
+        contrast($("#pWd").val(), $(this).val())
+    })
+
+    // 验证码
+
+
+    // 密码类型判断
+
+    function CharMode(type) {
+        if (type >= 48 && type <= 57) {
+            //数字
+            return 1;
+        } else if (type >= 65 && type <= 90) {
+            //大写
+            return 2;
+        } else if (type >= 97 && type <= 122) {
+            //小写
+            return 4;
+        } else {
+            return 8;
+        }
+    }
+
+    // 长度判断
+    function intensity(val) {
+        if (val.length < 6) {
+            return 0;
+        }
+        let Modes = 0
+        for (let i = 0; i < val.length; i++) {
+            Modes |= CharMode(val.charCodeAt(i));
+        }
+        return pattern(Modes)
+    }
+
+    // 强度等级
+    function pattern(str) {
+        let modes = 0
+        for (let i = 0; i < 4; i++) {
+            if (str & 1) {
+                modes++
+            }
+            str >>>= 1;
+        }
+        return modes;
+    }
+
+    // 强度显示
+    function strength(pwd, isoutTrue) {
+        if (pwd == null || pwd == "") {
+            $("#through").hide()
+            if (isoutTrue) {
+                $("#pasSpan").html("<span>" + "<img src='../img/login/erry.jpg'>" + "请设置登录密码！" + "</span>").addClass('cur');
+            }
+        } else {
+            let val = intensity(pwd);
+            switch (val) {
+                case 0:
+                    if (isoutTrue) {
+                        $("#pasSpan").html("<span>" + "<img src='../img/login/erry.jpg'>" + "长度只能在6-16个字符之间！" + "</span>").addClass('cur');
+                    }
+
+                    $("#through").hide();
+                    break;
+                case 1:
+                    if (isoutTrue) {
+                        $("#pasSpan").html("<span>" + "<img src='../img/login/erry.jpg'>" + "密码应为大小写字母+数字和特殊字符！" + "</span>").addClass('cur');
+                    }
+
+                    $("#through").hide();
+                    break;
+                case 2:
+                    if (isoutTrue) {
+                        $("#pasSpan").html("<span>" + "<img src='../img/register/rou.png'>" + "建议使用大小字母、数字和符号三种及以上组合" + "</span>").removeClass('cur');
+                    }
+
+                    $("#through").show();
+                    break;
+                case 3:
+                    if (isoutTrue) {
+                        $("#pasSpan").html("<span>" + "<img src='../img/register/zhong.png'>" + "安全适中，可以使用四种以上的组合来提高安全强度" + "</span>").removeClass('cur');
+                    }
+
+                    $("#through").show();
+                    break;
+                case 4:
+                    if (isoutTrue) {
+                        $("#pasSpan").html("<span>" + "<img src='../img/register/qiang.png'>" + "你的密码很安全" + "</span>").removeClass('cur');
+                    }
+
+                    $("#through").show();
+                    break;
+                default:
+
+                    $("#pasSpan").html("");
+                    $("#through").hide();
+                    break;
+            }
+        }
+    }
+
+    // 两次密码判断
+    function contrast(pwd, temp) {
+        if (temp == "") {
+            $("#affPwd").html("<span>" + "<img src='../img/login/erry.jpg'>" + "请再次确认密码" + "</span>").addClass("cur")
+            $("#againPassWord").hide()
+        } else if (pwd != temp) {
+            $("#affPwd").html("<span>" + "<img src='../img/login/erry.jpg'>" + "两次输入密码不一致，请重新输入" + "</span>").addClass("cur")
+            $("#againPassWord").hide()
+        } else {
+            $("#againPassWord").show()
+            $("#affPwd").html("")
+        }
+    }
+
+
+</script>
